@@ -45,6 +45,6 @@ class SwitchKitStorageUserDefault: SwitchKitStorage {
 }
 
 protocol SwitchKitStorage {
-    func setValue(_ value: String?, forKey key: String);
+    func setValue(_ value: String?, forKey key: String)
     func value(forKey key: String) -> String?
 }

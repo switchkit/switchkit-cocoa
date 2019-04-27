@@ -10,7 +10,7 @@ Star the project, and watch the project ("Releases only" would be enough) to be 
 ### Path to first release
 
 - [ ] Stabilize SwitchKit API
-- [ ] Enforce strong coding standards with swiftlint, swiftformat ASAP
+- [x] Enforce strong coding standards with swiftlint, ~swiftformat~ ASAP
 - [ ] Implement missing features
 - [ ] Get ready for Carthage, Cocoapods, SwiftPM
 - [ ] Documentation (Jazzy or Docusaurus)

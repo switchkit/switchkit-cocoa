@@ -37,15 +37,16 @@ class SwitchKitImageCache: NSCache<NSString, Image> {
 
 class SwitchKitUIImageValue: Image, SwitchKitObserver {
     var switchKitKeyName: String?
-    weak var switchKit: SwitchKit? = nil
+    weak var switchKit: SwitchKit?
     weak var bound: NSObject?
-    var block: ((Image?, NSObject, Error?)->Void)? = nil
-    func bind<T: NSObject>(_ to: T, block: @escaping (Image?, T, Error?)->Void) {
+    var block: ((Image?, NSObject, Error?) -> Void)?
+    func bind<Type: NSObject>(_ object: Type, block: @escaping (Image?, Type, Error?) -> Void) {
         self.block = { image, bound, error in
-            block(image, bound as! T, error)
+            // swiftlint:disable:next force_cast
+            block(image, bound as! Type, error)
         }
-        self.bound = to
-        objc_setAssociatedObject(to, &switchKitKeyName, self, .OBJC_ASSOCIATION_RETAIN_NONATOMIC)
+        self.bound = object
+        objc_setAssociatedObject(object, &switchKitKeyName, self, .OBJC_ASSOCIATION_RETAIN_NONATOMIC)
 
         switchKit?.addObserver(self)
         didUpdateSwitch(name: switchKitKeyName!)
@@ -70,10 +71,10 @@ extension SwitchKit {
 
     func image(forKey key: String,
                default defaultValue: Image? = nil,
-               block: @escaping (Image?, Error?) -> Void) -> Void {
+               block: @escaping (Image?, Error?) -> Void) {
 
         guard let URLString = storage.value(forKey: key), let url = URL(string: URLString) else {
-            block(defaultValue, NSError(domain: "io.github.switchkit", code:5, userInfo: nil))
+            block(defaultValue, NSError(domain: "io.github.switchkit", code: 5, userInfo: nil))
             return
         }
 
@@ -82,13 +83,13 @@ extension SwitchKit {
             return
         }
 
-        URLSession.shared.dataTask(with: url) { (data, response, error) in
+        URLSession.shared.dataTask(with: url) { (data, _, error) in
             DispatchQueue.main.async {
                 if let data = data, let downloadedImage = Image(data: data) {
                     SwitchKitImageCache.shared.setObject(downloadedImage, forKey: NSString(string: URLString))
                     block(downloadedImage, nil)
                 } else {
-                    block(defaultValue, error ?? NSError(domain: "io.github.switchkit", code:6, userInfo: nil))
+                    block(defaultValue, error ?? NSError(domain: "io.github.switchkit", code: 6, userInfo: nil))
                 }
             }
         }.resume()

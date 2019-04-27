@@ -24,7 +24,7 @@
 import Foundation
 
 extension SwitchKit {
-    
+
     @discardableResult
     func load(from: String, completion: ((Error?) -> Void)? = nil) -> SwitchKitLoadRequest {
         let load = SwitchKitLoadRequest(switchKit: self, url: from)
@@ -44,10 +44,10 @@ class SwitchKitLoadRequest {
 
     func now(completion: ((Error?) -> Void)? = nil) {
         guard let url = URL(string: self.url) else {
-            completion?(NSError(domain:"io.github.switchkit", code:1, userInfo:nil))
+            completion?(NSError(domain: "io.github.switchkit", code: 1, userInfo: nil))
             return
         }
-        URLSession.shared.dataTask(with: url) { (data, response, error) in
+        URLSession.shared.dataTask(with: url) { (data, _, error) in
             guard let data = data, error == nil else {
                 completion?(error)
                 return
@@ -57,7 +57,7 @@ class SwitchKitLoadRequest {
                 object.forEach { key, value in self.switchKit.setValue(value, forKey: key) }
                 completion?(nil)
             } else {
-                completion?(NSError(domain:"io.github.switchkit", code:2, userInfo:nil))
+                completion?(NSError(domain: "io.github.switchkit", code: 2, userInfo: nil))
             }
             }.resume()
     }

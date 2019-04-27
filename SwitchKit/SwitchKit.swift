@@ -63,10 +63,13 @@ public class SwitchKit {
 
         switch defaultValue {
         case _ as Color:
+            // swiftlint:disable:next force_cast
             return Color.from(string: value) as! Type
         case _ as Bool:
+            // swiftlint:disable:next force_cast
             return !(value.isEmpty) as! Type
         case _ as String:
+            // swiftlint:disable:next force_cast
             return value as! Type
         default: return defaultValue
         }
@@ -78,13 +81,13 @@ public class SwitchKit {
         delegates.append(WeakRef(observer))
     }
 
-    func setValues(fromDict registrationDictionary: [String : Any], path: String? = nil) {
+    func setValues(fromDict registrationDictionary: [String: Any], path: String? = nil) {
         for key in registrationDictionary.keys {
             let keyPath = (path?.appending(".") ?? "").appending(key)
             if let value = registrationDictionary[key] as? String {
                 setValue(value, forKey: keyPath)
             }
-            if let dict = registrationDictionary[key] as? [String : Any] {
+            if let dict = registrationDictionary[key] as? [String: Any] {
                 setValues(fromDict: dict, path: keyPath)
             }
         }
@@ -102,7 +105,6 @@ public class SwitchKit {
     }
 }
 
-
 protocol SwitchKitObserver: AnyObject {
     func didUpdateSwitch(name: String)
 }
@@ -113,5 +115,3 @@ class WeakRef<T> where T: AnyObject {
         self.value = value
     }
 }
-
-
