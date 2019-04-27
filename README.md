@@ -1,5 +1,7 @@
 # SwitchKit for iOS & OS X
 
+[![Build Status](https://travis-ci.org/switchkit/switchkit-cocoa.svg?branch=master)](https://travis-ci.org/switchkit/switchkit-cocoa)
+
 A Swift Framework for iOS &amp; OS X that let you change the behavior and appearance of your app without requiring users to download an app update.
 
 ## Disclaimer
@@ -16,5 +18,5 @@ Star the project, and watch the project ("Releases only" would be enough) to be 
 - [ ] Documentation (Jazzy or Docusaurus)
 - [ ] provide an example app
 - [ ] Github Page
-- [ ] Unit test
-- [ ] Integrate external CI (travis)
+- [ ] Unit test (target 80% coverage)
+- [x] Integrate external CI (travis)
