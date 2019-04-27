@@ -12,7 +12,7 @@
 		4C7A00402274687B00B08EA1 /* SwitchKit.h in Headers */ = {isa = PBXBuildFile; fileRef = 4C7A00322274687B00B08EA1 /* SwitchKit.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		4C7A004C22746AEB00B08EA1 /* SwitchKit.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4C7A004B22746AEB00B08EA1 /* SwitchKit.swift */; };
 		4C7A005122746B2A00B08EA1 /* SwitchKitStorage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4C7A004D22746B2900B08EA1 /* SwitchKitStorage.swift */; };
-		4C7A005222746B2A00B08EA1 /* UIColor+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4C7A004E22746B2900B08EA1 /* UIColor+Extensions.swift */; };
+		4C7A005222746B2A00B08EA1 /* Color+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4C7A004E22746B2900B08EA1 /* Color+Extensions.swift */; };
 		4C7A005322746B2A00B08EA1 /* SwitchKit+Image.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4C7A004F22746B2900B08EA1 /* SwitchKit+Image.swift */; };
 		4C7A005422746B2A00B08EA1 /* SwitchKit+Remote.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4C7A005022746B2900B08EA1 /* SwitchKit+Remote.swift */; };
 /* End PBXBuildFile section */
@@ -36,7 +36,7 @@
 		4C7A003F2274687B00B08EA1 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		4C7A004B22746AEB00B08EA1 /* SwitchKit.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SwitchKit.swift; sourceTree = "<group>"; };
 		4C7A004D22746B2900B08EA1 /* SwitchKitStorage.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SwitchKitStorage.swift; sourceTree = "<group>"; };
-		4C7A004E22746B2900B08EA1 /* UIColor+Extensions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "UIColor+Extensions.swift"; sourceTree = "<group>"; };
+		4C7A004E22746B2900B08EA1 /* Color+Extensions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Color+Extensions.swift"; sourceTree = "<group>"; };
 		4C7A004F22746B2900B08EA1 /* SwitchKit+Image.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "SwitchKit+Image.swift"; sourceTree = "<group>"; };
 		4C7A005022746B2900B08EA1 /* SwitchKit+Remote.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "SwitchKit+Remote.swift"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -87,7 +87,7 @@
 				4C7A005022746B2900B08EA1 /* SwitchKit+Remote.swift */,
 				4C7A004F22746B2900B08EA1 /* SwitchKit+Image.swift */,
 				4C7A004D22746B2900B08EA1 /* SwitchKitStorage.swift */,
-				4C7A004E22746B2900B08EA1 /* UIColor+Extensions.swift */,
+				4C7A004E22746B2900B08EA1 /* Color+Extensions.swift */,
 			);
 			path = SwitchKit;
 			sourceTree = "<group>";
@@ -213,7 +213,7 @@
 				4C7A005322746B2A00B08EA1 /* SwitchKit+Image.swift in Sources */,
 				4C7A005122746B2A00B08EA1 /* SwitchKitStorage.swift in Sources */,
 				4C7A005422746B2A00B08EA1 /* SwitchKit+Remote.swift in Sources */,
-				4C7A005222746B2A00B08EA1 /* UIColor+Extensions.swift in Sources */,
+				4C7A005222746B2A00B08EA1 /* Color+Extensions.swift in Sources */,
 				4C7A004C22746AEB00B08EA1 /* SwitchKit.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
