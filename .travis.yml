@@ -1,0 +1,10 @@
+language: objective-c
+osx_image: xcode10.2
+
+env:
+  - PLATFORM=Mac DESTINATION='platform=macOS'
+  - PLATFORM=iOS DESTINATION='platform=iOS Simulator,name=iPhone 6S'
+  - PLATFORM=tvOS DESTINATION='platform=tvOS Simulator,name=Apple TV 4K (at 1080p)'
+
+script:
+  - set -o pipefail && xcodebuild -scheme SwitchKit -destination "$DESTINATION" test | xcpretty
