@@ -34,9 +34,19 @@ class SwitchKitTests: XCTestCase {
         // Put teardown code here. This method is called after the invocation of each test method in the class.
     }
 
-    func testExample() {
-        // This is an example of a functional test case.
-        // Use XCTAssert and related functions to verify your tests produce the correct results.
+    func testSetValuesFlattern() {
+        let instance = SwitchKit(storage: SwitchKitStorageVolatile())
+
+        instance.setValues(fromDict: [
+            "key1": "value1",
+            "key2": ["subkey1": "value2", "subkey2": "value3"]
+            ])
+
+        XCTAssertEqual(instance.storage.value(forKey: "key1"), "value1")
+        XCTAssertEqual(instance.storage.value(forKey: "key2.subkey1"), "value2")
+        XCTAssertEqual(instance.storage.value(forKey: "key2.subkey2"), "value3")
+        XCTAssertEqual(instance.storage.value(forKey: "key2"), nil)
+        XCTAssertEqual(instance.storage.value(forKey: "key3"), nil)
     }
 
     func testPerformanceExample() {

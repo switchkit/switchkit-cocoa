@@ -23,7 +23,13 @@
 
 import Foundation
 
-class SwitchKitStorageUserDefault: SwitchKitStorage {
+protocol SwitchKitStorage {
+    func setValue(_ value: String?, forKey key: String)
+    func setValues(_ values: [String: String?])
+    func value(forKey key: String) -> String?
+}
+
+public class SwitchKitStorageUserDefault: SwitchKitStorage {
     let suiteName = "io.github.switchkit"
     let userDefaults: UserDefaults
 
@@ -33,18 +39,45 @@ class SwitchKitStorageUserDefault: SwitchKitStorage {
 
     func setValue(_ value: String?, forKey key: String) {
         userDefaults.setValue(value, forKey: key)
+        userDefaults.synchronize()
+    }
+
+    func setValues(_ values: [String: String?]) {
+        values.forEach { key, value in
+            userDefaults.setValue(value, forKey: key)
+        }
+        userDefaults.synchronize()
     }
 
     func value(forKey key: String) -> String? {
         return userDefaults.string(forKey: key)
     }
-
-    deinit {
-        userDefaults.synchronize()
-    }
 }
 
-protocol SwitchKitStorage {
-    func setValue(_ value: String?, forKey key: String)
-    func value(forKey key: String) -> String?
+public class SwitchKitStorageVolatile: SwitchKitStorage {
+
+    private(set) var data: [String: String] = [:]
+
+    func setValue(_ value: String?, forKey key: String) {
+        if let value = value {
+            data.updateValue(value, forKey: key)
+        } else {
+            data.removeValue(forKey: key)
+        }
+    }
+
+    func setValues(_ values: [String: String?]) {
+        values.keys.forEach { key in
+            if let value = values[key] as? String {
+                data.updateValue(value, forKey: key)
+            } else {
+                data.removeValue(forKey: key)
+            }
+        }
+    }
+
+    func value(forKey key: String) -> String? {
+        return data[key]
+    }
+
 }

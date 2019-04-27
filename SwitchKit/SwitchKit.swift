@@ -81,14 +81,36 @@ public class SwitchKit {
         delegates.append(WeakRef(observer))
     }
 
-    func setValues(fromDict registrationDictionary: [String: Any], path: String? = nil) {
-        for key in registrationDictionary.keys {
-            let keyPath = (path?.appending(".") ?? "").appending(key)
-            if let value = registrationDictionary[key] as? String {
-                setValue(value, forKey: keyPath)
+    func setValues(fromDict registrationDictionary: [String: Any]) {
+        func flattern(_ dict: [String: Any], path: String? = nil) -> [String: String] {
+            var values: [String: String] = [:]
+            for key in dict.keys {
+                let keyPath = (path?.appending(".") ?? "").appending(key)
+                if let value = dict[key] as? String {
+                    values[keyPath] = value
+                }
+                if let dict = dict[key] as? [String: Any] {
+                    flattern(dict, path: keyPath).forEach { (arg0) in
+                        let (key, value) = arg0
+                        values[key] = value
+                    }
+                }
             }
-            if let dict = registrationDictionary[key] as? [String: Any] {
-                setValues(fromDict: dict, path: keyPath)
+            return values
+        }
+
+        let values = flattern(registrationDictionary)
+        storage.setValues(values)
+
+        for key in values.keys {
+            for delegate in delegates {
+                guard let delegate = delegate.value as? SwitchKitObserver else {
+                    continue
+                }
+
+                DispatchQueue.main.async {
+                    delegate.didUpdateSwitch(name: key)
+                }
             }
         }
     }
@@ -109,6 +131,8 @@ protocol SwitchKitObserver: AnyObject {
     func didUpdateSwitch(name: String)
 }
 
+/// Helper that provide a type-safe weak reference holder
+/// https://marcosantadev.com/swift-arrays-holding-elements-weak-references/
 class WeakRef<T> where T: AnyObject {
     private(set) weak var value: T?
     init(_ value: T?) {
