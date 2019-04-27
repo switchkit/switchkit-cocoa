@@ -2,9 +2,11 @@ language: objective-c
 osx_image: xcode10.2
 
 env:
-  - PLATFORM=Mac DESTINATION='platform=macOS'
-  - PLATFORM=iOS DESTINATION='platform=iOS Simulator,name=iPhone 6S'
-  - PLATFORM=tvOS DESTINATION='platform=tvOS Simulator,name=Apple TV 4K (at 1080p)'
+  - PLATFORM=Mac DESTINATION='platform=macOS' CODECOV_TOKEN="2655dc6b-fceb-4a29-908d-bd1c40d207c8"
+  - PLATFORM=iOS DESTINATION='platform=iOS Simulator,name=iPhone 6S' CODECOV_TOKEN="2655dc6b-fceb-4a29-908d-bd1c40d207c8"
+  - PLATFORM=tvOS DESTINATION='platform=tvOS Simulator,name=Apple TV 4K (at 1080p)' CODECOV_TOKEN="2655dc6b-fceb-4a29-908d-bd1c40d207c8"
 
 script:
   - set -o pipefail && xcodebuild -scheme SwitchKit -destination "$DESTINATION" test | xcpretty
+after_success:
+  - bash <(curl -s https://codecov.io/bash)
