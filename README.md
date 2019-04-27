@@ -2,6 +2,7 @@
 
 [![Build Status](https://travis-ci.org/switchkit/switchkit-cocoa.svg?branch=master)](https://travis-ci.org/switchkit/switchkit-cocoa)
 [![codecov](https://codecov.io/gh/switchkit/switchkit-cocoa/branch/master/graph/badge.svg)](https://codecov.io/gh/switchkit/switchkit-cocoa)
+[![Maintainability](https://api.codeclimate.com/v1/badges/9b8760a942750e8bd560/maintainability)](https://codeclimate.com/github/switchkit/switchkit-cocoa/maintainability)
 
 A Swift Framework for iOS &amp; OS X that let you change the behavior and appearance of your app without requiring users to download an app update.
 
