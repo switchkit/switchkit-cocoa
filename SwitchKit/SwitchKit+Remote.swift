@@ -25,6 +25,19 @@ import Foundation
 
 extension SwitchKit {
 
+    private static var requestModifiers = [String: ((URLRequest) -> URLRequest)]()
+
+    var requestModifier: ((URLRequest) -> URLRequest) {
+        get {
+            let instance = String(format: "%p", unsafeBitCast(self, to: Int.self))
+            return SwitchKit.requestModifiers[instance] ?? { $0 }
+        }
+        set(newValue) {
+            let instance = String(format: "%p", unsafeBitCast(self, to: Int.self))
+            SwitchKit.requestModifiers[instance] = newValue
+        }
+    }
+
     @discardableResult
     func load(from: String, completion: ((Error?) -> Void)? = nil) -> SwitchKitLoadRequest {
         let load = SwitchKitLoadRequest(switchKit: self, url: from)
@@ -47,7 +60,8 @@ class SwitchKitLoadRequest {
             completion?(NSError(domain: "io.github.switchkit", code: 1, userInfo: nil))
             return
         }
-        URLSession.shared.dataTask(with: url) { (data, _, error) in
+        let request = switchKit.requestModifier(URLRequest(url: url))
+        URLSession.shared.dataTask(with: request) { (data, resp, error) in
             guard let data = data, error == nil else {
                 completion?(error)
                 return
