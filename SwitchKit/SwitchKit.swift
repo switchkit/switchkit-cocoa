@@ -32,11 +32,16 @@ import Foundation
 public class SwitchKit {
     let storage: SwitchKitStorage
 
-    static var shared = SwitchKit(storage: SwitchKitStorageUserDefault())
+    static var shared = SwitchKit(storage: SwitchKitStorageUserDefaults())
 
+    /// Designated initializer.
+    ///
+    /// - Parameter storage: SwitchKitStorage instance used to read or write SwitchKit values.
     init(storage: SwitchKitStorage) {
         self.storage = storage
     }
+
+    // MARK: -
 
     func color(forKey key: String, default defaultValue: Color? = nil) -> Color? {
         if let string = storage.value(forKey: key) {
@@ -47,39 +52,100 @@ public class SwitchKit {
 
     func url(forKey key: String, default defaultValue: URL? = nil) -> URL? {
         if let string = storage.value(forKey: key) {
-            return URL(string: string)
+            return URL(string: string) ?? defaultValue
         }
         return defaultValue
     }
 
-    func value(_ name: String) -> Bool {
-        return value(name, default: false)
+    func bool(forKey key: String, default defaultValue: Bool = false) -> Bool {
+        if let string = storage.value(forKey: key) {
+            return !(string.isEmpty)
+        }
+        return defaultValue
     }
 
-    func value<Type>(_ name: String, default defaultValue: Type) -> Type {
-        guard let value = storage.value(forKey: name) else {
+    func string(forKey key: String, default defaultValue: String? = nil) -> String? {
+        return storage.value(forKey: key) ?? defaultValue
+    }
+
+    func int(forKey key: String, default defaultValue: Int? = nil) -> Int? {
+        guard let value = storage.value(forKey: key) else {
             return defaultValue
         }
 
+        if let int = Int(value) { return int }
+        if let double = Double(value) { return Int(double) }
+
+        return defaultValue
+    }
+
+    func double(forKey key: String, default defaultValue: Double? = nil) -> Double? {
+        return Double(storage.value(forKey: key) ?? "") ?? defaultValue
+    }
+
+    func float(forKey key: String, default defaultValue: Float? = nil) -> Float? {
+        return Float(storage.value(forKey: key) ?? "") ?? defaultValue
+    }
+
+    // MARK: -
+
+    /// Let a SwitchKit value act as a boolean, if value isn't set or is empty,
+    /// the method return false
+    ///
+    /// - Parameters:
+    ///   - key: SwitchKit key name
+    /// - Returns: true if a value is set and is not empty.
+    func value(_ key: String) -> Bool {
+        return value(key, default: false)
+    }
+
+    func value<Type>(_ key: String, default defaultValue: Type) -> Type {
+
+        var value: Any?
+
         switch defaultValue {
         case _ as Color:
-            // swiftlint:disable:next force_cast
-            return Color.from(string: value) as! Type
-        case _ as Bool:
-            // swiftlint:disable:next force_cast
-            return !(value.isEmpty) as! Type
+            value = self.double(forKey: key)
+
+        case let defaultValue as Bool:
+            value = self.bool(forKey: key, default: defaultValue)
+
         case _ as String:
-            // swiftlint:disable:next force_cast
-            return value as! Type
+            value = self.string(forKey: key)
+
+        case _ as Int:
+            value = self.int(forKey: key)
+
+        case _ as Double:
+            value = self.double(forKey: key)
+
+        case _ as Float:
+            value = self.float(forKey: key)
+
         default: return defaultValue
         }
+
+        if let value = value {
+            // We unwrap first the optional value to avoid optional(optional(Type))
+            // when an optional Type is given as defaultValue.
+            // According to previous switch case, we could technically force
+            // downcast to Type. But let be safe and swiftlint compliant.
+            return value as? Type ?? defaultValue
+        }
+
+        return defaultValue
+
     }
+
+    // MARK: -
 
     var delegates: [WeakRef<AnyObject>] = []
 
     func addObserver(_ observer: SwitchKitObserver) {
         delegates.append(WeakRef(observer))
     }
+
+    // MARK: -
 
     func setValues(fromDict registrationDictionary: [String: Any]) {
         func flattern(_ dict: [String: Any], path: String? = nil) -> [String: String] {

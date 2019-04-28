@@ -29,7 +29,7 @@ protocol SwitchKitStorage {
     func value(forKey key: String) -> String?
 }
 
-public class SwitchKitStorageUserDefault: SwitchKitStorage {
+public class SwitchKitStorageUserDefaults: SwitchKitStorage {
     let suiteName = "io.github.switchkit"
     let userDefaults: UserDefaults
 
@@ -54,7 +54,7 @@ public class SwitchKitStorageUserDefault: SwitchKitStorage {
     }
 }
 
-public class SwitchKitStorageVolatile: SwitchKitStorage {
+public class SwitchKitStorageMemory: SwitchKitStorage {
 
     private(set) var data: [String: String] = [:]
 

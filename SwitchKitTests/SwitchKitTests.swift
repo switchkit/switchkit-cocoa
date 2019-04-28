@@ -26,21 +26,20 @@ import XCTest
 
 class SwitchKitTests: XCTestCase {
 
-    override func setUp() {
-        // Put setup code here. This method is called before the invocation of each test method in the class.
-    }
+    var instance = SwitchKit(storage: SwitchKitStorageMemory())
 
-    override func tearDown() {
-        // Put teardown code here. This method is called after the invocation of each test method in the class.
+    override func setUp() {
+        /// Clean up SwitchKit instance before each test
+        instance = SwitchKit(storage: SwitchKitStorageMemory())
     }
 
     func testSetValuesFlattern() {
-        let instance = SwitchKit(storage: SwitchKitStorageVolatile())
-
         instance.setValues(fromDict: [
             "key1": "value1",
-            "key2": ["subkey1": "value2", "subkey2": "value3"]
-            ])
+            "key2": [
+                "subkey1": "value2",
+                "subkey2": "value3"
+            ]])
 
         XCTAssertEqual(instance.storage.value(forKey: "key1"), "value1")
         XCTAssertEqual(instance.storage.value(forKey: "key2.subkey1"), "value2")
@@ -49,11 +48,161 @@ class SwitchKitTests: XCTestCase {
         XCTAssertEqual(instance.storage.value(forKey: "key3"), nil)
     }
 
-    func testPerformanceExample() {
-        // This is an example of a performance test case.
-        self.measure {
-            // Put the code you want to measure the time of here.
-        }
+    func testValueBool() {
+        instance.setValues(fromDict: [
+            "string": "string",
+            "empty": "",
+            "false": "false",
+            "zero": "0"
+            ])
+
+        XCTAssertEqual(instance.value("string", default: false), true)
+        XCTAssertEqual(instance.value("string", default: true), true)
+        XCTAssertEqual(instance.value("empty", default: false), false)
+        XCTAssertEqual(instance.value("empty", default: true), false)
+        XCTAssertEqual(instance.value("unknown", default: false), false)
+        XCTAssertEqual(instance.value("unknown", default: true), true)
+
+        // Any non-empty string is evaluated as true
+        XCTAssertEqual(instance.value("false", default: false), true)
+        XCTAssertEqual(instance.value("false", default: true), true)
+        XCTAssertEqual(instance.value("zero", default: false), true)
+        XCTAssertEqual(instance.value("zero", default: true), true)
+    }
+
+    func testValueString() {
+        instance.setValues(fromDict: [
+            "string": "string",
+            "empty": ""
+            ])
+
+        XCTAssertEqual(instance.value("string", default: "fallback"), "string")
+        XCTAssertEqual(instance.value("empty", default: "fallback"), "")
+        XCTAssertEqual(instance.value("unknown", default: "fallback"), "fallback")
+    }
+
+    func testValueInt() {
+        instance.setValues(fromDict: [
+            "val_0": "0",
+            "val_10": "10",
+            "val_10.0": "10.0"
+            ])
+
+        XCTAssertEqual(instance.value("val_0", default: 5), 0)
+        XCTAssertEqual(instance.value("val_10", default: 5), 10)
+        XCTAssertEqual(instance.value("val_10.0", default: 5), 10)
+        XCTAssertEqual(instance.value("val_unknown", default: 5), 5)
+    }
+
+    func testValueIntInvalid() {
+        instance.setValues(fromDict: [
+            "val_alpha": "alpha",
+            "val_alpha10": "alpha10",
+            "val_10alpha": "10alpha",
+            "val_10.0.1": "10.0.1",
+            "val_empty": ""
+            ])
+
+        XCTAssertEqual(instance.value("val_alpha", default: 5), 5)
+        XCTAssertEqual(instance.value("val_alpha10", default: 5), 5)
+        XCTAssertEqual(instance.value("val_10alpha", default: 5), 5)
+        XCTAssertEqual(instance.value("val_10.0.1", default: 5), 5)
+        XCTAssertEqual(instance.value("val_empty", default: 5), 5)
+    }
+
+    func testValueOptionalInt() {
+        instance.setValue("0", forKey: "val_0")
+
+        XCTAssertEqual(instance.value("val_0", default: Optional(5)), 0)
+        XCTAssertEqual(instance.value("unknown", default: Optional(5)), 5)
+        XCTAssertEqual(instance.value("val_0", default: Optional(Optional(5))), 0)
+        XCTAssertEqual(instance.value("unknown", default: Optional(Optional(5))), 5)
+    }
+
+    func testValueDouble() {
+        instance.setValues(fromDict: [
+            "val_0": "0",
+            "val_10": "10",
+            "val_10.0": "10.0"
+            ])
+
+        XCTAssertEqual(instance.value("val_0", default: 5.0), 0)
+        XCTAssertEqual(instance.value("val_10", default: 5.0), 10)
+        XCTAssertEqual(instance.value("val_10.0", default: 5.0), 10)
+        XCTAssertEqual(instance.value("val_unknown", default: 5.0), 5)
+    }
+
+    func testValueDoubleInvalid() {
+        instance.setValues(fromDict: [
+            "val_alpha": "alpha",
+            "val_alpha10": "alpha10",
+            "val_10alpha": "10alpha",
+            "val_10.0.1": "10.0.1",
+            "val_empty": ""
+            ])
+
+        XCTAssertEqual(instance.value("val_alpha", default: 5.0), 5)
+        XCTAssertEqual(instance.value("val_alpha10", default: 5.0), 5)
+        XCTAssertEqual(instance.value("val_10alpha", default: 5.0), 5)
+        XCTAssertEqual(instance.value("val_10.0.1", default: 5.0), 5)
+        XCTAssertEqual(instance.value("val_empty", default: 5.0), 5)
+    }
+
+    func testValueOptionalDouble() {
+        instance.setValue("0", forKey: "val_0")
+
+        XCTAssertEqual(instance.value("val_0", default: Optional(5.0)), 0)
+        XCTAssertEqual(instance.value("unknown", default: Optional(5.0)), 5)
+        XCTAssertEqual(instance.value("val_0", default: Optional(Optional(5.0))), 0)
+        XCTAssertEqual(instance.value("unknown", default: Optional(Optional(5.0))), 5)
+    }
+
+    func testValueFloat() {
+        instance.setValues(fromDict: [
+            "val_0": "0",
+            "val_10": "10",
+            "val_10.0": "10.0"
+            ])
+
+        XCTAssertEqual(instance.value("val_0", default: Float(5)), 0)
+        XCTAssertEqual(instance.value("val_10", default: Float(5)), 10)
+        XCTAssertEqual(instance.value("val_10.0", default: Float(5)), 10)
+        XCTAssertEqual(instance.value("val_unknown", default: Float(5)), 5)
+    }
+
+    func testValueFloatInvalid() {
+        instance.setValues(fromDict: [
+            "val_alpha": "alpha",
+            "val_alpha10": "alpha10",
+            "val_10alpha": "10alpha",
+            "val_10.0.1": "10.0.1",
+            "val_empty": ""
+            ])
+
+        XCTAssertEqual(instance.value("val_alpha", default: Float(5)), 5)
+        XCTAssertEqual(instance.value("val_alpha10", default: Float(5)), 5)
+        XCTAssertEqual(instance.value("val_10alpha", default: Float(5)), 5)
+        XCTAssertEqual(instance.value("val_10.0.1", default: Float(5)), 5)
+        XCTAssertEqual(instance.value("val_empty", default: Float(5)), 5)
+    }
+
+    func testValueOptionalFloat() {
+        instance.setValue("0", forKey: "val_0")
+
+        XCTAssertEqual(instance.value("val_0", default: Optional(Float(5))), 0)
+        XCTAssertEqual(instance.value("unknown", default: Optional(Float(5))), 5)
+        XCTAssertEqual(instance.value("val_0", default: Optional(Optional(Float(5)))), 0)
+        XCTAssertEqual(instance.value("unknown", default: Optional(Optional(Float(5)))), 5)
+    }
+
+    func testValueUnsupportedType() {
+        instance.setValue("value", forKey: "key")
+
+        // swiftlint:disable:next nesting
+        struct Custom: Equatable {}
+        let defaultValue = Custom()
+
+        XCTAssertEqual(instance.value("key", default: defaultValue), defaultValue)
     }
 
 }
