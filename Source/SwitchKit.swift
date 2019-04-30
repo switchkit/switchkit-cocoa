@@ -156,7 +156,7 @@ public class SwitchKit {
                     values[keyPath] = value
                 }
                 if let dict = dict[key] as? [String: Any] {
-                    flattern(dict, path: keyPath).forEach { (arg0) in
+                    flattern(dict, path: keyPath).forEach { arg0 in
                         let (key, value) = arg0
                         values[key] = value
                     }
@@ -201,6 +201,7 @@ protocol SwitchKitObserver: AnyObject {
 /// https://marcosantadev.com/swift-arrays-holding-elements-weak-references/
 class WeakRef<T> where T: AnyObject {
     private(set) weak var value: T?
+
     init(_ value: T?) {
         self.value = value
     }

@@ -40,6 +40,7 @@ class SwitchKitUIImageValue: Image, SwitchKitObserver {
     weak var switchKit: SwitchKit?
     weak var bound: NSObject?
     var block: ((Image?, NSObject, Error?) -> Void)?
+
     func bind<Type: NSObject>(_ object: Type, block: @escaping (Image?, Type, Error?) -> Void) {
         self.block = { image, bound, error in
             // swiftlint:disable:next force_cast
@@ -83,7 +84,7 @@ extension SwitchKit {
             return
         }
 
-        URLSession.shared.dataTask(with: url) { (data, _, error) in
+        URLSession.shared.dataTask(with: url) { data, _, error in
             DispatchQueue.main.async {
                 if let data = data, let downloadedImage = Image(data: data) {
                     SwitchKitImageCache.shared.setObject(downloadedImage, forKey: NSString(string: URLString))

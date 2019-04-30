@@ -22,6 +22,7 @@
 //  THE SOFTWARE.
 
 import XCTest
+
 @testable import SwitchKit
 
 class SwitchKitTests: XCTestCase {
@@ -29,6 +30,7 @@ class SwitchKitTests: XCTestCase {
     var instance = SwitchKit(storage: SwitchKitStorageMemory())
 
     override func setUp() {
+        super.setUp()
         /// Clean up SwitchKit instance before each test
         instance = SwitchKit(storage: SwitchKitStorageMemory())
     }
@@ -39,7 +41,8 @@ class SwitchKitTests: XCTestCase {
             "key2": [
                 "subkey1": "value2",
                 "subkey2": "value3"
-            ]])
+            ]
+        ])
 
         XCTAssertEqual(instance.storage.value(forKey: "key1"), "value1")
         XCTAssertEqual(instance.storage.value(forKey: "key2.subkey1"), "value2")
@@ -54,7 +57,7 @@ class SwitchKitTests: XCTestCase {
             "empty": "",
             "false": "false",
             "zero": "0"
-            ])
+        ])
 
         XCTAssertEqual(instance.value("string", default: false), true)
         XCTAssertEqual(instance.value("string", default: true), true)
@@ -74,7 +77,7 @@ class SwitchKitTests: XCTestCase {
         instance.setValues(fromDict: [
             "string": "string",
             "empty": ""
-            ])
+        ])
 
         XCTAssertEqual(instance.value("string", default: "fallback"), "string")
         XCTAssertEqual(instance.value("empty", default: "fallback"), "")
@@ -86,7 +89,7 @@ class SwitchKitTests: XCTestCase {
             "val_0": "0",
             "val_10": "10",
             "val_10.0": "10.0"
-            ])
+        ])
 
         XCTAssertEqual(instance.value("val_0", default: 5), 0)
         XCTAssertEqual(instance.value("val_10", default: 5), 10)
@@ -101,7 +104,7 @@ class SwitchKitTests: XCTestCase {
             "val_10alpha": "10alpha",
             "val_10.0.1": "10.0.1",
             "val_empty": ""
-            ])
+        ])
 
         XCTAssertEqual(instance.value("val_alpha", default: 5), 5)
         XCTAssertEqual(instance.value("val_alpha10", default: 5), 5)
@@ -124,7 +127,7 @@ class SwitchKitTests: XCTestCase {
             "val_0": "0",
             "val_10": "10",
             "val_10.0": "10.0"
-            ])
+        ])
 
         XCTAssertEqual(instance.value("val_0", default: 5.0), 0)
         XCTAssertEqual(instance.value("val_10", default: 5.0), 10)
@@ -139,7 +142,7 @@ class SwitchKitTests: XCTestCase {
             "val_10alpha": "10alpha",
             "val_10.0.1": "10.0.1",
             "val_empty": ""
-            ])
+        ])
 
         XCTAssertEqual(instance.value("val_alpha", default: 5.0), 5)
         XCTAssertEqual(instance.value("val_alpha10", default: 5.0), 5)
@@ -162,7 +165,7 @@ class SwitchKitTests: XCTestCase {
             "val_0": "0",
             "val_10": "10",
             "val_10.0": "10.0"
-            ])
+        ])
 
         XCTAssertEqual(instance.value("val_0", default: Float(5)), 0)
         XCTAssertEqual(instance.value("val_10", default: Float(5)), 10)
@@ -177,7 +180,7 @@ class SwitchKitTests: XCTestCase {
             "val_10alpha": "10alpha",
             "val_10.0.1": "10.0.1",
             "val_empty": ""
-            ])
+        ])
 
         XCTAssertEqual(instance.value("val_alpha", default: Float(5)), 5)
         XCTAssertEqual(instance.value("val_alpha10", default: Float(5)), 5)

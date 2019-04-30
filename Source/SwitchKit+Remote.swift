@@ -61,7 +61,7 @@ class SwitchKitLoadRequest {
             return
         }
         let request = switchKit.requestModifier(URLRequest(url: url))
-        URLSession.shared.dataTask(with: request) { (data, resp, error) in
+        URLSession.shared.dataTask(with: request) { data, _, error in
             guard let data = data, error == nil else {
                 completion?(error)
                 return
@@ -73,7 +73,7 @@ class SwitchKitLoadRequest {
             } else {
                 completion?(NSError(domain: "io.github.switchkit", code: 2, userInfo: nil))
             }
-            }.resume()
+        }.resume()
     }
 
     func every(seconds: TimeInterval, completion: ((Error?) -> Void)? = nil) -> Timer {

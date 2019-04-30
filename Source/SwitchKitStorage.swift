@@ -34,7 +34,7 @@ public class SwitchKitStorageUserDefaults: SwitchKitStorage {
     let userDefaults: UserDefaults
 
     init() {
-        userDefaults = UserDefaults.init(suiteName: suiteName)!
+        userDefaults = UserDefaults(suiteName: suiteName)!
     }
 
     func setValue(_ value: String?, forKey key: String) {
