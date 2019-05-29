@@ -10,3 +10,10 @@ script:
   - set -o pipefail && xcodebuild -scheme SwitchKit -destination "$DESTINATION" test | xcpretty
 after_success:
   - bash <(curl -s https://codecov.io/bash)
+deploy:
+  provider: releases
+  api_key:
+    secure: O4Sz9wicZMyy00KnMVMqtFHcgxxYot+z0Sat7JwFXytkop/7nL+gjP6UoX2NlJlJfRPVWiLWcGJWh8V6kSkfN4tWtrEtt4Yh4JgCvWbxW8q4Pa/8fgRfHAxquaJMKsIMgc2w7t/wPIwYSyUgjMLrDYgovo5qT4+4GFasnfhgrdP2hGbTyjXWoU/GtGaHXxSXRrY/rw8HycjshFe5h6vKhQ1OyritZ6SRXYpQB9EXeQWRKlANMdD/tj0eJXTSoKs6G/3qDdniPM921jifr06m6ZUna61WQldYaH0N4aQ3s96Zm5OCmq7gVaTT/xgb8XMvuVr8IYrXyHGwnsBUqabfRkTUzLxlQQw22Ipx6xtfZDwSSZbDLe0KhTRzzk1xnD2CNiBLHBfEL3eOGV25YofFHEGj1ey8vAmCUNGzNadLs4SNGuarPCq/225wXh1YI4cQzjCZRh2KQP4k2Z2ly8ndcaCPXO6XQm4Ja5YahZzbQdIec8HS5nQmAmXGPl72qTZjgMyqrtMC+e9Uv+fCQnW5eU1aEBpHODgmZySKkydgvxYpgMU0ks5bqtvTpVjccxHtLgyVdCrNctqc5fqHP323vjdgElxYdeOh1cRAFCpRzN3qWK+E6MlnJ7VX21tQ1+cVpUiavsjCIrgigQ8gOn+fh2FLOlEqJtwBsddCsHXxCGU=
+  file: "$FRAMEWORK_NAME.framework.zip"
+  on:
+    repo: switchkit/switchkit-cocoa
