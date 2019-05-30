@@ -105,7 +105,7 @@ public class SwitchKit {
 
         switch defaultValue {
         case _ as Color:
-            value = self.double(forKey: key)
+            value = self.color(forKey: key)
 
         case let defaultValue as Bool:
             value = self.bool(forKey: key, default: defaultValue)
