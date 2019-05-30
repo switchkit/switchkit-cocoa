@@ -2,6 +2,9 @@
 <Workspace
    version = "1.0">
    <FileRef
+      location = "group:SwitchKitDemo/SwitchKitDemo.xcodeproj">
+   </FileRef>
+   <FileRef
       location = "group:SwitchKit.xcodeproj">
    </FileRef>
 </Workspace>
