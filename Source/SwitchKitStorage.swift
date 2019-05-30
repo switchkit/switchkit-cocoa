@@ -23,7 +23,7 @@
 
 import Foundation
 
-protocol SwitchKitStorage {
+public protocol SwitchKitStorage {
     func setValue(_ value: String?, forKey key: String)
     func setValues(_ values: [String: String?])
     func value(forKey key: String) -> String?
@@ -33,23 +33,23 @@ public class SwitchKitStorageUserDefaults: SwitchKitStorage {
     let suiteName = "io.github.switchkit"
     let userDefaults: UserDefaults
 
-    init() {
+    public init() {
         userDefaults = UserDefaults(suiteName: suiteName)!
     }
 
-    func setValue(_ value: String?, forKey key: String) {
+    public func setValue(_ value: String?, forKey key: String) {
         userDefaults.setValue(value, forKey: key)
         userDefaults.synchronize()
     }
 
-    func setValues(_ values: [String: String?]) {
+    public func setValues(_ values: [String: String?]) {
         values.forEach { key, value in
             userDefaults.setValue(value, forKey: key)
         }
         userDefaults.synchronize()
     }
 
-    func value(forKey key: String) -> String? {
+    public func value(forKey key: String) -> String? {
         return userDefaults.string(forKey: key)
     }
 }
@@ -58,7 +58,7 @@ public class SwitchKitStorageMemory: SwitchKitStorage {
 
     private(set) var data: [String: String] = [:]
 
-    func setValue(_ value: String?, forKey key: String) {
+    public func setValue(_ value: String?, forKey key: String) {
         if let value = value {
             data.updateValue(value, forKey: key)
         } else {
@@ -66,7 +66,7 @@ public class SwitchKitStorageMemory: SwitchKitStorage {
         }
     }
 
-    func setValues(_ values: [String: String?]) {
+    public func setValues(_ values: [String: String?]) {
         values.keys.forEach { key in
             if let value = values[key] as? String {
                 data.updateValue(value, forKey: key)
@@ -76,7 +76,7 @@ public class SwitchKitStorageMemory: SwitchKitStorage {
         }
     }
 
-    func value(forKey key: String) -> String? {
+    public func value(forKey key: String) -> String? {
         return data[key]
     }
 

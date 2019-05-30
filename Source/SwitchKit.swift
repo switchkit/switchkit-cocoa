@@ -32,43 +32,43 @@ import Foundation
 public class SwitchKit {
     let storage: SwitchKitStorage
 
-    static var shared = SwitchKit(storage: SwitchKitStorageUserDefaults())
+    public static var shared = SwitchKit(storage: SwitchKitStorageMemory())
 
     /// Designated initializer.
     ///
     /// - Parameter storage: SwitchKitStorage instance used to read or write SwitchKit values.
-    init(storage: SwitchKitStorage) {
+    public init(storage: SwitchKitStorage) {
         self.storage = storage
     }
 
     // MARK: -
 
-    func color(forKey key: String, default defaultValue: Color? = nil) -> Color? {
+    public func color(forKey key: String, default defaultValue: Color? = nil) -> Color? {
         if let string = storage.value(forKey: key) {
             return Color.from(string: string)
         }
         return defaultValue
     }
 
-    func url(forKey key: String, default defaultValue: URL? = nil) -> URL? {
+    public func url(forKey key: String, default defaultValue: URL? = nil) -> URL? {
         if let string = storage.value(forKey: key) {
             return URL(string: string) ?? defaultValue
         }
         return defaultValue
     }
 
-    func bool(forKey key: String, default defaultValue: Bool = false) -> Bool {
+    public func bool(forKey key: String, default defaultValue: Bool = false) -> Bool {
         if let string = storage.value(forKey: key) {
             return !(string.isEmpty)
         }
         return defaultValue
     }
 
-    func string(forKey key: String, default defaultValue: String? = nil) -> String? {
+    public func string(forKey key: String, default defaultValue: String? = nil) -> String? {
         return storage.value(forKey: key) ?? defaultValue
     }
 
-    func int(forKey key: String, default defaultValue: Int? = nil) -> Int? {
+    public func int(forKey key: String, default defaultValue: Int? = nil) -> Int? {
         guard let value = storage.value(forKey: key) else {
             return defaultValue
         }
@@ -79,11 +79,11 @@ public class SwitchKit {
         return defaultValue
     }
 
-    func double(forKey key: String, default defaultValue: Double? = nil) -> Double? {
+    public func double(forKey key: String, default defaultValue: Double? = nil) -> Double? {
         return Double(storage.value(forKey: key) ?? "") ?? defaultValue
     }
 
-    func float(forKey key: String, default defaultValue: Float? = nil) -> Float? {
+    public func float(forKey key: String, default defaultValue: Float? = nil) -> Float? {
         return Float(storage.value(forKey: key) ?? "") ?? defaultValue
     }
 
@@ -95,11 +95,11 @@ public class SwitchKit {
     /// - Parameters:
     ///   - key: SwitchKit key name
     /// - Returns: true if a value is set and is not empty.
-    func value(_ key: String) -> Bool {
+    public func value(_ key: String) -> Bool {
         return value(key, default: false)
     }
 
-    func value<Type>(_ key: String, default defaultValue: Type) -> Type {
+    public func value<Type>(_ key: String, default defaultValue: Type) -> Type {
 
         var value: Any?
 
@@ -141,13 +141,13 @@ public class SwitchKit {
 
     var delegates: [WeakRef<AnyObject>] = []
 
-    func addObserver(_ observer: SwitchKitObserver) {
+    public func addObserver(_ observer: SwitchKitObserver) {
         delegates.append(WeakRef(observer))
     }
 
     // MARK: -
 
-    func setValues(fromDict registrationDictionary: [String: Any]) {
+    public func setValues(fromDict registrationDictionary: [String: Any]) {
         func flattern(_ dict: [String: Any], path: String? = nil) -> [String: String] {
             var values: [String: String] = [:]
             for key in dict.keys {
@@ -181,7 +181,7 @@ public class SwitchKit {
         }
     }
 
-    func setValue(_ value: String?, forKey key: String) {
+    public func setValue(_ value: String?, forKey key: String) {
         storage.setValue(value, forKey: key)
         for delegate in delegates {
             if let delegate = delegate.value as? SwitchKitObserver {
@@ -193,13 +193,13 @@ public class SwitchKit {
     }
 }
 
-protocol SwitchKitObserver: AnyObject {
+public protocol SwitchKitObserver: AnyObject {
     func didUpdateSwitch(name: String)
 }
 
 /// Helper that provide a type-safe weak reference holder
 /// https://marcosantadev.com/swift-arrays-holding-elements-weak-references/
-class WeakRef<T> where T: AnyObject {
+internal class WeakRef<T> where T: AnyObject {
     private(set) weak var value: T?
 
     init(_ value: T?) {

@@ -27,7 +27,7 @@ extension SwitchKit {
 
     private static var requestModifiers = [String: ((URLRequest) -> URLRequest)]()
 
-    var requestModifier: ((URLRequest) -> URLRequest) {
+    public var requestModifier: ((URLRequest) -> URLRequest) {
         get {
             let instance = String(format: "%p", unsafeBitCast(self, to: Int.self))
             return SwitchKit.requestModifiers[instance] ?? { $0 }
@@ -39,23 +39,23 @@ extension SwitchKit {
     }
 
     @discardableResult
-    func load(from: String, completion: ((Error?) -> Void)? = nil) -> SwitchKitLoadRequest {
+    public func load(from: String, completion: ((Error?) -> Void)? = nil) -> SwitchKitLoadRequest {
         let load = SwitchKitLoadRequest(switchKit: self, url: from)
         load.now(completion: completion)
         return load
     }
 }
 
-class SwitchKitLoadRequest {
-    let switchKit: SwitchKit
-    let url: String
+public class SwitchKitLoadRequest {
+    internal let switchKit: SwitchKit
+    internal let url: String
 
-    init(switchKit: SwitchKit, url: String) {
+    internal init(switchKit: SwitchKit, url: String) {
         self.switchKit = switchKit
         self.url = url
     }
 
-    func now(completion: ((Error?) -> Void)? = nil) {
+    public func now(completion: ((Error?) -> Void)? = nil) {
         guard let url = URL(string: self.url) else {
             completion?(NSError(domain: "io.github.switchkit", code: 1, userInfo: nil))
             return
@@ -76,7 +76,7 @@ class SwitchKitLoadRequest {
         }.resume()
     }
 
-    func every(seconds: TimeInterval, completion: ((Error?) -> Void)? = nil) -> Timer {
+    public func every(seconds: TimeInterval, completion: ((Error?) -> Void)? = nil) -> Timer {
         return Timer.scheduledTimer(withTimeInterval: seconds, repeats: true) { _ in
             self.now(completion: completion)
         }

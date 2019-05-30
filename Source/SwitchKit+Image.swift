@@ -35,13 +35,13 @@ class SwitchKitImageCache: NSCache<NSString, Image> {
     static var shared = SwitchKitImageCache()
 }
 
-class SwitchKitUIImageValue: Image, SwitchKitObserver {
+public class SwitchKitUIImageValue: Image, SwitchKitObserver {
     var switchKitKeyName: String?
     weak var switchKit: SwitchKit?
     weak var bound: NSObject?
     var block: ((Image?, NSObject, Error?) -> Void)?
 
-    func bind<Type: NSObject>(_ object: Type, block: @escaping (Image?, Type, Error?) -> Void) {
+    public func bind<Type: NSObject>(_ object: Type, block: @escaping (Image?, Type, Error?) -> Void) {
         self.block = { image, bound, error in
             // swiftlint:disable:next force_cast
             block(image, bound as! Type, error)
@@ -52,7 +52,8 @@ class SwitchKitUIImageValue: Image, SwitchKitObserver {
         switchKit?.addObserver(self)
         didUpdateSwitch(name: switchKitKeyName!)
     }
-    func didUpdateSwitch(name: String) {
+
+    public func didUpdateSwitch(name: String) {
         if name == switchKitKeyName, let bound = self.bound {
             switchKit?.image(forKey: name) { image, error in
                 self.block?(image, bound, error)
@@ -61,7 +62,7 @@ class SwitchKitUIImageValue: Image, SwitchKitObserver {
     }
 }
 
-extension SwitchKit {
+public extension SwitchKit {
 
     func image(forKey key: String, default defaultValue: Image? = nil) -> SwitchKitUIImageValue {
         let image = SwitchKitUIImageValue()
