@@ -20,5 +20,5 @@ Star the project, and watch the project ("Releases only" would be enough) to be 
 - [ ] Documentation (Jazzy or Docusaurus)
 - [ ] provide an example app
 - [ ] Github Page
-- [ ] Unit test (target 80% coverage)
+- [ ] Unit test (target 90% coverage)
 - [x] Integrate external CI (travis)
